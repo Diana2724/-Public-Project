@@ -4,8 +4,7 @@
 
 
 ### 이미지 삽입
-![AI그림](https://blogfiles.pstatic.net/MjAyMzExMThfMTgx/MDAxNzAwMjk2ODI3MjY2.3qREHw8jHWwEjVGKKS7QtkOJKZyYC-BOKBITQKakmeYg.vT-fFp4qOkdVt5eRlmgIQ8vtpkOasPguoZl_DexvmyQg.JPEG.ohhappydiana/20231110-4.jpeg)
-
+![AI그림]
 <img src = "https://blogfiles.pstatic.net/MjAyMzExMThfMTgx/MDAxNzAwMjk2ODI3MjY2.3qREHw8jHWwEjVGKKS7QtkOJKZyYC-BOKBITQKakmeYg.vT-fFp4qOkdVt5eRlmgIQ8vtpkOasPguoZl_DexvmyQg.JPEG.ohhappydiana/20231110-4.jpeg" width="300" height="300">
 
 
