@@ -1,6 +1,6 @@
 # -Public-Project
 
-### [1.URL이동] 데이터가 뛰어노는 AI 놀이터, 캐글 [누르기](http://www.naver.com)
+### [1.URL이동] 데이터가 뛰어노는 AI 놀이터, 캐글 [👉누르기](http://www.naver.com)
 
 
 ### [2.이미지 삽입]
