@@ -116,7 +116,7 @@ def app():
         st.markdown(f"### {userName}님의 냉장고를 부탁해~ 셰프봇! 🧑‍🍳")
 
         # 사용자 입력 받기
-        user_input = st.text_input(f"{userName}님의 냉장고에 있는 재료를 적어주세요 15분만에 맛있는 요리를 같이 만들어볼까요?", key='ingredients_input')
+        user_input = st.text_input(f"{userName}님의 냉장고 속 재료를 적어주세요. 15분동안 맛있는 요리를 같이 만들어볼까요?", key='ingredients_input')
 
         if user_input:
             # 번역기 설정
@@ -133,13 +133,13 @@ def app():
                     response_text_en = response.candidates[0]['output']
                     response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
 
-                    # 생성된 응답 출력
-                    st.write(response_text_ko)
+                    # 생성된 응답 출력 형식화
+                    st.write(response_text_ko.replace("\\n", "\n"))
                 except Exception as e:
                     st.write(f"오류가 발생했습니다: {e}")
 
             # '요리 만들기 시작' 버튼 클릭 시 동작
-            if st.button("요리 만들기 시작", key='start_cooking'):
+            if st.button("요리 시작", key='start_cooking'):
                 st.session_state['page'] = 'timer'
 
     elif st.session_state['page'] == 'timer':
@@ -158,7 +158,7 @@ def app():
                 st.markdown(f'<div class="timer">{timer}</div>', unsafe_allow_html=True)
                 time.sleep(1)
 
-                if remaining_time == 0 or st.button("요리완성", key='complete_cooking'):
+                if remaining_time == 0 or st.button("요리 완성", key='complete_cooking'):
                     st.session_state['page'] = 'fireworks'
                     break
 
