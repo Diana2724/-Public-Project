@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+from googletrans import Translator
 import time
 
 def app():
@@ -97,6 +98,9 @@ def app():
     GOOGLE_API_KEY = "AIzaSyBvmKfof-audrEt56gzpXbJsoiyT9OE38c"
     genai.configure(api_key=GOOGLE_API_KEY)
 
+    # 번역기 초기화
+    translator = Translator()
+
     # Streamlit 애플리케이션 시작
     if 'page' not in st.session_state:
         st.session_state['page'] = 'input_name'
@@ -122,12 +126,18 @@ def app():
         if st.button("메시지 전송", key='send_message'):
             if user_input:
                 try:
+                    # 입력 텍스트를 영어로 번역
+                    user_input_en = translator.translate(user_input, src='ko', dest='en').text
+
                     # 모델에 사용자 입력 전달하여 응답 생성
-                    response = genai.generate_text(prompt=user_input, model="models/text-bison-001")
-                    response_text = response.candidates[0].output
+                    response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
+                    response_text_en = response.candidates[0]['output']
+
+                    # 응답을 한국어로 번역
+                    response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
 
                     # 생성된 응답 출력 형식화
-                    st.write(response_text.replace("\\n", "\n"))
+                    st.write(response_text_ko.replace("\\n", "\n"))
 
                     if st.button("요리 시작", key='start_cooking'):
                         st.session_state['page'] = 'timer'
