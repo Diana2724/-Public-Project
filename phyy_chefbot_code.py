@@ -102,10 +102,12 @@ def app():
         st.session_state['page'] = 'input_name'
 
     if st.session_state['page'] == 'input_name':
-        # 사용자 이름 입력 받기
+        image_url = "https://i.imgur.com/7cBH3fu.png"
+        st.image(image_url)
+        st.markdown('<div class="title-container"><h1>냉장고를 부탁해~ 셰프봇! 🧑‍🍳</h1></div>', unsafe_allow_html=True)
         st.session_state['user_name'] = st.text_input("이름을 입력하세요", key='name_input')
 
-        if st.session_state['user_name']:
+        if st.button("이름 전송") and st.session_state['user_name']:
             st.session_state['page'] = 'input_ingredients'
 
     elif st.session_state['page'] == 'input_ingredients':
