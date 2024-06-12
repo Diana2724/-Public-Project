@@ -92,30 +92,33 @@ def app():
             text-align: center;
             color: #333;
         }
-        .fireworks {
+        .balloons {
             position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            display: block;
+            z-index: 9999;
+            pointer-events: none;
         }
-        .firework {
-            width: 5px;
-            height: 5px;
-            background-color: #ff0;
+        .balloon {
             position: absolute;
-            animation: fireworks 1s linear infinite;
+            bottom: -100px;
+            width: 50px;
+            height: 80px;
+            background: radial-gradient(circle at 50% 100%, #ff8c00, #ff4500);
+            border-radius: 50%;
+            animation: rise 5s linear infinite;
         }
-        @keyframes fireworks {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0.1); opacity: 0; }
+        @keyframes rise {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-1000px); opacity: 0; }
         }
         </style>
         <script>
-        function showFireworks() {
-            const fireworksContainer = document.querySelector('.fireworks');
-            fireworksContainer.style.display = 'block';
+        function showBalloons() {
+            const balloonsContainer = document.querySelector('.balloons');
+            balloonsContainer.style.display = 'block';
         }
         </script>
         """,
@@ -201,29 +204,34 @@ def app():
             timer_placeholder.markdown(f'<div class="timer">{timer}</div>', unsafe_allow_html=True)
 
             if complete_button_placeholder.button("요리 완성", key=f'complete_cooking_{remaining_time}'):
-                st.session_state['page'] = 'fireworks'
+                st.session_state['page'] = 'celebration'
                 st.experimental_rerun()
                 break
 
             if remaining_time == 0:
-                st.session_state['page'] = 'fireworks'
+                st.session_state['page'] = 'celebration'
                 st.experimental_rerun()
                 break
 
             time.sleep(1)
 
-    elif st.session_state['page'] == 'fireworks':
+    elif st.session_state['page'] == 'celebration':
         st.markdown('<div class="title-container"><h1>축하합니다! 이제 행복한 식사를 즐기세요~! 🎉</h1></div>', unsafe_allow_html=True)
         st.markdown(
             """
-            <div class="fireworks" style="display: block;">
-                <div class="firework" style="top: 50%; left: 50%;"></div>
-                <div class="firework" style="top: 30%; left: 70%;"></div>
-                <div class="firework" style="top: 80%; left: 20%;"></div>
-                <div class="firework" style="top: 60%; left: 80%;"></div>
+            <div class="balloons">
+                <div class="balloon" style="left: 10%;"></div>
+                <div class="balloon" style="left: 20%; animation-delay: 1s;"></div>
+                <div class="balloon" style="left: 30%; animation-delay: 2s;"></div>
+                <div class="balloon" style="left: 40%; animation-delay: 3s;"></div>
+                <div class="balloon" style="left: 50%; animation-delay: 4s;"></div>
+                <div class="balloon" style="left: 60%; animation-delay: 5s;"></div>
+                <div class="balloon" style="left: 70%; animation-delay: 6s;"></div>
+                <div class="balloon" style="left: 80%; animation-delay: 7s;"></div>
+                <div class="balloon" style="left: 90%; animation-delay: 8s;"></div>
             </div>
             <script>
-            showFireworks();
+            showBalloons();
             </script>
             """,
             unsafe_allow_html=True
