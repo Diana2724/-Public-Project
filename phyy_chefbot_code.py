@@ -90,37 +90,6 @@ def app():
             text-align: center;
             color: #333;
         }
-        .balloons {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        .balloon {
-            position: absolute;
-            bottom: -100px;
-            width: 50px;
-            height: 80px;
-            background: radial-gradient(circle at 50% 100%, #ff8c00, #ff4500);
-            border-radius: 50%;
-            animation: rise 5s linear infinite;
-        }
-        .balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .balloon:nth-child(2) { left: 20%; animation-delay: 1s; }
-        .balloon:nth-child(3) { left: 30%; animation-delay: 2s; }
-        .balloon:nth-child(4) { left: 40%; animation-delay: 3s; }
-        .balloon:nth-child(5) { left: 50%; animation-delay: 4s; }
-        .balloon:nth-child(6) { left: 60%; animation-delay: 5s; }
-        .balloon:nth-child(7) { left: 70%; animation-delay: 6s; }
-        .balloon:nth-child(8) { left: 80%; animation-delay: 7s; }
-        .balloon:nth-child(9) { left: 90%; animation-delay: 8s; }
-        @keyframes rise {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-1000px); opacity: 0; }
-        }
         </style>
         """,
         unsafe_allow_html=True
@@ -164,6 +133,8 @@ def app():
 
                     # 모델에 사용자 입력 전달하여 응답 생성
                     response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
+                    st.write("API 응답: ", response)  # 응답 내용 출력
+
                     response_text_en = response.candidates[0]['output'] if response.candidates else "응답을 생성할 수 없습니다."
 
                     # 응답을 한국어로 번역
@@ -172,6 +143,7 @@ def app():
                     # 생성된 응답 출력 형식화
                     formatted_response = format_recipe(response_text_ko)
                     st.markdown(formatted_response)
+                    st.write("번역된 응답: ", response_text_ko)  # 번역된 응답 출력
 
                     if 'recipe_generated' not in st.session_state:
                         st.session_state['recipe_generated'] = True
