@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+from googletrans import Translator
 
 # gData 모듈 대신 이름을 하드코딩
 user_name = "사용자"
@@ -94,16 +95,23 @@ def app():
 
     # 사용자 입력 받기
     user_input = st.text_input(f"{user_name}님의 냉장고에 있는 재료를 적어주세요 15분만에 맛있는 요리를 같이 만들어볼까요?")
-    user_input = "\"" + user_input + "\"" + " 따옴표 안에 음식재료가 있다면 재료로 15분 내로 만들 수 있는 레시피와 요리이름을 알려줘 하지만 음식으로 사용할 수 없는 재료라면 \"잘못된 재료입니다\"라고만 응답해"
 
     # '전송' 버튼 클릭 시 동작
     if st.button("메시지 전송"):
         try:
+            # 입력 텍스트를 영어로 번역
+            translator = Translator()
+            user_input_en = translator.translate(user_input, src='ko', dest='en').text
+
             # 모델에 사용자 입력 전달하여 응답 생성
-            response = genai.generate_text(prompt=user_input, model="models/text-bison-001")
+            response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
+
+            # 생성된 응답을 다시 한국어로 번역
+            response_text_en = response.candidates[0]['text']
+            response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
+
             # 생성된 응답 출력
-            response_text = response.candidates[0]['text']
-            st.write(response_text)
+            st.write(response_text_ko)
         except Exception as e:
             st.write(f"오류가 발생했습니다: {e}")
 
