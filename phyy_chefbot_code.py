@@ -5,20 +5,25 @@ import time
 import re
 
 def format_recipe(text):
-    # 텍스트에서 레시피 부분을 찾아 형식화
-    ingredients = re.findall(r'재료:(.*?)\n\n', text, re.DOTALL)
-    instructions = re.findall(r'조리법:(.*?)\n\n', text, re.DOTALL)
-    if ingredients and instructions:
-        ingredients = ingredients[0].strip().split('\n')
-        instructions = instructions[0].strip().split('\n')
-        formatted_text = f"### 재료:\n"
+    # 텍스트에서 재료와 조리법 부분을 찾아 형식화
+    ingredients_match = re.search(r'재료:\s*(.*?)(?:조리법|$)', text, re.DOTALL)
+    instructions_match = re.search(r'조리법:\s*(.*)', text, re.DOTALL)
+    
+    formatted_text = ""
+
+    if ingredients_match:
+        ingredients = ingredients_match.group(1).strip().split('\n')
+        formatted_text += "### 재료:\n"
         for item in ingredients:
             formatted_text += f"- {item.strip()}\n"
+
+    if instructions_match:
+        instructions = instructions_match.group(1).strip().split('\n')
         formatted_text += "\n### 조리법:\n"
-        for step in instructions:
-            formatted_text += f"1. {step.strip()}\n"
-        return formatted_text
-    return text
+        for i, step in enumerate(instructions, 1):
+            formatted_text += f"{i}. {step.strip()}\n"
+
+    return formatted_text
 
 def app():
     # CSS 및 JavaScript 스타일 정의
@@ -93,7 +98,7 @@ def app():
             height: 100%;
             top: 0;
             left: 0;
-            display: none;
+            display: block;
         }
         .firework {
             width: 5px;
