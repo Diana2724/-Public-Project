@@ -107,8 +107,8 @@ def app():
         st.session_state['page'] = 'input_name'
 
     if st.session_state['page'] == 'input_name':
-        image_url = "https://i.imgur.com/7cBH3fu.png"
-        st.image(image_url)
+        # image_url = "https://i.imgur.com/7cBH3fu.png"
+        # st.image(image_url)
         st.markdown('<div class="title-container"><h1>냉장고를 부탁해~ 셰프봇! 🧑‍🍳</h1></div>', unsafe_allow_html=True)
         st.session_state['user_name'] = st.text_input("이름을 입력하세요", key='name_input')
         st.session_state['gender'] = st.radio("성별을 선택하세요", ('남자', '여자'))
