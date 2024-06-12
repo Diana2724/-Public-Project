@@ -4,7 +4,6 @@ from googletrans import Translator
 import time
 
 def app():
-
     # CSS 스타일 정의
     st.markdown(
         """
@@ -88,7 +87,7 @@ def app():
     if st.button("메시지 전송"):
         try:
             response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
-            response_text_en = response['candidates'][0]['output']
+            response_text_en = response.candidates[0]['output']
             response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
             st.write(response_text_ko)
 
