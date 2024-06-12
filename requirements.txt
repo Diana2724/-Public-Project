@@ -2,3 +2,4 @@ streamlit
 google-generativeai
 Pillow
 requests
+googletrans==4.0.0-rc1
