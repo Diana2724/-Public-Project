@@ -2,9 +2,26 @@ import streamlit as st
 import google.generativeai as genai
 from googletrans import Translator
 import time
+import re
+
+def format_recipe(text):
+    # 텍스트에서 레시피 부분을 찾아 형식화
+    ingredients = re.findall(r'재료:(.*?)\n\n', text, re.DOTALL)
+    instructions = re.findall(r'조리법:(.*?)\n\n', text, re.DOTALL)
+    if ingredients and instructions:
+        ingredients = ingredients[0].strip().split('\n')
+        instructions = instructions[0].strip().split('\n')
+        formatted_text = f"### 재료:\n"
+        for item in ingredients:
+            formatted_text += f"- {item.strip()}\n"
+        formatted_text += "\n### 조리법:\n"
+        for step in instructions:
+            formatted_text += f"1. {step.strip()}\n"
+        return formatted_text
+    return text
 
 def app():
-    # CSS 스타일 정의
+    # CSS 및 JavaScript 스타일 정의
     st.markdown(
         """
         <style>
@@ -90,6 +107,12 @@ def app():
             100% { transform: scale(0.1); opacity: 0; }
         }
         </style>
+        <script>
+        function showFireworks() {
+            const fireworksContainer = document.querySelector('.fireworks');
+            fireworksContainer.style.display = 'block';
+        }
+        </script>
         """,
         unsafe_allow_html=True
     )
@@ -110,6 +133,7 @@ def app():
         st.image(image_url)
         st.markdown('<div class="title-container"><h1>냉장고를 부탁해~ 셰프봇! 🧑‍🍳</h1></div>', unsafe_allow_html=True)
         st.session_state['user_name'] = st.text_input("이름을 입력하세요", key='name_input')
+        st.session_state['gender'] = st.radio("성별을 선택하세요", ('남자', '여자'))
 
         if st.button("이름 전송", key='submit_name'):
             if st.session_state['user_name']:
@@ -137,8 +161,8 @@ def app():
                     response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
 
                     # 생성된 응답 출력 형식화
-                    formatted_response = response_text_ko.replace("\\n", "\n")
-                    st.markdown(f"### 레시피: {formatted_response}")
+                    formatted_response = format_recipe(response_text_ko)
+                    st.markdown(formatted_response)
 
                     if 'recipe_generated' not in st.session_state:
                         st.session_state['recipe_generated'] = True
@@ -154,7 +178,8 @@ def app():
 
     elif st.session_state['page'] == 'timer':
         userName = st.session_state['user_name']
-        emoji = "🧑‍🍳" if userName[-1] in "철홍민형종근" else "👩‍🍳"
+        gender = st.session_state['gender']
+        emoji = "🧑‍🍳" if gender == '남자' else "👩‍🍳"
         st.markdown(f'<div class="title-container"><h1>{userName}님은 지금 맛있는 요리중 {emoji}</h1></div>', unsafe_allow_html=True)
 
         if 'timer_start' not in st.session_state:
@@ -183,7 +208,7 @@ def app():
             time.sleep(1)
 
     elif st.session_state['page'] == 'fireworks':
-        st.markdown('<div class="title-container"><h1>축하합니다! 요리가 완성되었습니다! 🎉</h1></div>', unsafe_allow_html=True)
+        st.markdown('<div class="title-container"><h1>축하합니다! 이제 행복한 식사를 즐기세요~! 🎉</h1></div>', unsafe_allow_html=True)
         st.markdown(
             """
             <div class="fireworks" style="display: block;">
@@ -192,10 +217,12 @@ def app():
                 <div class="firework" style="top: 80%; left: 20%;"></div>
                 <div class="firework" style="top: 60%; left: 80%;"></div>
             </div>
+            <script>
+            showFireworks();
+            </script>
             """,
             unsafe_allow_html=True
         )
-        st.write("다시 시작하려면 페이지를 새로고침하세요.")
 
 if __name__ == "__main__":
     app()
