@@ -107,22 +107,23 @@ def app():
         st.markdown('<div class="title-container"><h1>냉장고를 부탁해~ 셰프봇! 🧑‍🍳</h1></div>', unsafe_allow_html=True)
         st.session_state['user_name'] = st.text_input("이름을 입력하세요", key='name_input')
 
-        if st.button("이름 전송") and st.session_state['user_name']:
-            st.session_state['page'] = 'input_ingredients'
+        if st.button("이름 전송"):
+            if st.session_state['user_name']:
+                st.session_state['page'] = 'input_ingredients'
 
     elif st.session_state['page'] == 'input_ingredients':
         userName = st.session_state['user_name']
         st.markdown(f"### {userName}님의 냉장고를 부탁해~ 셰프봇! 🧑‍🍳")
 
         # 사용자 입력 받기
-        user_input = st.text_input(f"{userName}님의 냉장고에 있는 재료를 적어주세요 15분만에 맛있는 요리를 같이 만들어볼까요?")
+        user_input = st.text_input(f"{userName}님의 냉장고에 있는 재료를 적어주세요 15분만에 맛있는 요리를 같이 만들어볼까요?", key='ingredients_input')
 
         if user_input:
             # 번역기 설정
             translator = Translator()
 
             # '메시지 전송' 버튼 클릭 시 동작
-            if st.button("메시지 전송"):
+            if st.button("메시지 전송", key='send_message'):
                 try:
                     # 입력 텍스트를 영어로 번역
                     user_input_en = translator.translate(user_input, src='ko', dest='en').text
@@ -138,7 +139,7 @@ def app():
                     st.write(f"오류가 발생했습니다: {e}")
 
             # '요리 만들기 시작' 버튼 클릭 시 동작
-            if st.button("요리 만들기 시작"):
+            if st.button("요리 만들기 시작", key='start_cooking'):
                 st.session_state['page'] = 'timer'
 
     elif st.session_state['page'] == 'timer':
@@ -157,7 +158,7 @@ def app():
                 st.markdown(f'<div class="timer">{timer}</div>', unsafe_allow_html=True)
                 time.sleep(1)
 
-                if remaining_time == 0 or st.button("요리완성"):
+                if remaining_time == 0 or st.button("요리완성", key='complete_cooking'):
                     st.session_state['page'] = 'fireworks'
                     break
 
