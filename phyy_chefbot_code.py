@@ -110,6 +110,7 @@ def app():
         if st.button("이름 전송", key='submit_name'):
             if st.session_state['user_name']:
                 st.session_state['page'] = 'input_ingredients'
+                st.experimental_rerun()
 
     elif st.session_state['page'] == 'input_ingredients':
         userName = st.session_state['user_name']
@@ -118,19 +119,16 @@ def app():
         # 사용자 입력 받기
         user_input = st.text_input(f"{userName}님의 냉장고 속 재료를 적어주세요. 15분동안 맛있는 요리를 같이 만들어볼까요?", key='ingredients_input')
 
-        if user_input:
-            # 번역기 설정
-            translator = Translator()
+        if st.button("메시지 전송", key='send_message'):
+            if user_input:
+                try:
+                    # 모델에 사용자 입력 전달하여 응답 생성
+                    response = genai.generate_text(prompt=user_input, model="models/text-bison-001")
+                    response_text = response.candidates[0]['output']
 
-            # '메시지 전송' 버튼 클릭 시 동작
-        if st.button("메시지 전송"):
-        # 모델에 사용자 입력 전달하여 응답 생성
-        response = model.generate_content(user_input)
-        # 생성된 응답 출력
-        response_text = response.candidates[0].content.parts[0].text
-        st.write(response_text)
+                    # 생성된 응답 출력 형식화
+                    st.write(response_text.replace("\\n", "\n"))
 
-                    # '요리 시작' 버튼 클릭 시 동작
                     if st.button("요리 시작", key='start_cooking'):
                         st.session_state['page'] = 'timer'
                         st.session_state['timer_start'] = time.time()
