@@ -107,7 +107,7 @@ def app():
         st.markdown('<div class="title-container"><h1>냉장고를 부탁해~ 셰프봇! 🧑‍🍳</h1></div>', unsafe_allow_html=True)
         st.session_state['user_name'] = st.text_input("이름을 입력하세요", key='name_input')
 
-        if st.button("이름 전송"):
+        if st.button("이름 전송", key='submit_name'):
             if st.session_state['user_name']:
                 st.session_state['page'] = 'input_ingredients'
 
@@ -138,9 +138,9 @@ def app():
                 except Exception as e:
                     st.write(f"오류가 발생했습니다: {e}")
 
-            # '요리 만들기 시작' 버튼 클릭 시 동작
-            if st.button("요리 시작", key='start_cooking'):
-                st.session_state['page'] = 'timer'
+                # '요리 시작' 버튼 클릭 시 동작
+                if st.button("요리 시작", key='start_cooking'):
+                    st.session_state['page'] = 'timer'
 
     elif st.session_state['page'] == 'timer':
         st.markdown('<div class="title-container"><h1>타이머</h1></div>', unsafe_allow_html=True)
@@ -149,18 +149,25 @@ def app():
         if 'timer_start' not in st.session_state:
             st.session_state['timer_start'] = time.time()
 
-        with st.empty():
-            while True:
-                elapsed_time = int(time.time() - st.session_state['timer_start'])
-                remaining_time = max(15*60 - elapsed_time, 0)
-                mins, secs = divmod(remaining_time, 60)
-                timer = '{:02d}:{:02d}'.format(mins, secs)
-                st.markdown(f'<div class="timer">{timer}</div>', unsafe_allow_html=True)
-                time.sleep(1)
+        timer_placeholder = st.empty()
+        complete_button_placeholder = st.empty()
 
-                if remaining_time == 0 or st.button("요리 완성", key='complete_cooking'):
-                    st.session_state['page'] = 'fireworks'
-                    break
+        while True:
+            elapsed_time = int(time.time() - st.session_state['timer_start'])
+            remaining_time = max(15*60 - elapsed_time, 0)
+            mins, secs = divmod(remaining_time, 60)
+            timer = '{:02d}:{:02d}'.format(mins, secs)
+            timer_placeholder.markdown(f'<div class="timer">{timer}</div>', unsafe_allow_html=True)
+
+            if complete_button_placeholder.button("요리 완성", key=f'complete_cooking_{remaining_time}'):
+                st.session_state['page'] = 'fireworks'
+                break
+
+            if remaining_time == 0:
+                st.session_state['page'] = 'fireworks'
+                break
+
+            time.sleep(1)
 
     elif st.session_state['page'] == 'fireworks':
         st.markdown('<div class="title-container"><h1>축하합니다! 요리가 완성되었습니다! 🎉</h1></div>', unsafe_allow_html=True)
