@@ -1,6 +1,5 @@
 import streamlit as st
 import google.generativeai as genai
-from googletrans import Translator
 import time
 
 def app():
@@ -98,6 +97,10 @@ def app():
     GOOGLE_API_KEY = "AIzaSyBvmKfof-audrEt56gzpXbJsoiyT9OE38c"
     genai.configure(api_key=GOOGLE_API_KEY)
 
+    # 생성 모델 초기화
+    model = genai.models.get("models/text-bison-001")
+
+    # Streamlit 애플리케이션 시작
     if 'page' not in st.session_state:
         st.session_state['page'] = 'input_name'
 
@@ -123,8 +126,8 @@ def app():
             if user_input:
                 try:
                     # 모델에 사용자 입력 전달하여 응답 생성
-                    response = genai.generate_text(prompt=user_input, model="models/text-bison-001")
-                    response_text = response.candidates[0]['output']
+                    response = model.generate(user_input)
+                    response_text = response.candidates[0].output
 
                     # 생성된 응답 출력 형식화
                     st.write(response_text.replace("\\n", "\n"))
