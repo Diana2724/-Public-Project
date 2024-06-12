@@ -134,10 +134,14 @@ def app():
                     # 모델에 사용자 입력 전달하여 응답 생성
                     prompt = f"Please provide a detailed recipe using the following ingredients: {user_input_en}. The recipe should include a list of ingredients and step-by-step cooking instructions."
                     response = genai.generate_text(prompt=prompt, model="models/text-bison-001")
+                    st.write("API 응답: ", response)  # 응답 내용 출력
+
                     response_text_en = response.candidates[0]['output'] if response.candidates else "응답을 생성할 수 없습니다."
+                    st.write("API 응답 텍스트: ", response_text_en)  # 응답 텍스트 출력
 
                     # 응답을 한국어로 번역
                     response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
+                    st.write("번역된 응답: ", response_text_ko)  # 번역된 응답 출력
 
                     # 생성된 응답 출력 형식화
                     formatted_response = format_recipe(response_text_ko)
