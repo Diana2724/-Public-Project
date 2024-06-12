@@ -137,7 +137,8 @@ def app():
                     response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
 
                     # 생성된 응답 출력 형식화
-                    st.write(response_text_ko.replace("\\n", "\n"))
+                    formatted_response = response_text_ko.replace("\\n", "\n")
+                    st.markdown(f"### 레시피: {formatted_response}")
 
                     if 'recipe_generated' not in st.session_state:
                         st.session_state['recipe_generated'] = True
@@ -152,8 +153,9 @@ def app():
                 st.experimental_rerun()
 
     elif st.session_state['page'] == 'timer':
-        st.markdown('<div class="title-container"><h1>타이머</h1></div>', unsafe_allow_html=True)
-        st.write("타이머가 시작되었습니다!")
+        userName = st.session_state['user_name']
+        emoji = "🧑‍🍳" if userName[-1] in "철홍민형종근" else "👩‍🍳"
+        st.markdown(f'<div class="title-container"><h1>{userName}님은 지금 맛있는 요리중 {emoji}</h1></div>', unsafe_allow_html=True)
 
         if 'timer_start' not in st.session_state:
             st.session_state['timer_start'] = time.time()
@@ -184,7 +186,7 @@ def app():
         st.markdown('<div class="title-container"><h1>축하합니다! 요리가 완성되었습니다! 🎉</h1></div>', unsafe_allow_html=True)
         st.markdown(
             """
-            <div class="fireworks">
+            <div class="fireworks" style="display: block;">
                 <div class="firework" style="top: 50%; left: 50%;"></div>
                 <div class="firework" style="top: 30%; left: 70%;"></div>
                 <div class="firework" style="top: 80%; left: 20%;"></div>
