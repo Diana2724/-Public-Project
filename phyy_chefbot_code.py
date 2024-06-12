@@ -123,24 +123,21 @@ def app():
             translator = Translator()
 
             # '메시지 전송' 버튼 클릭 시 동작
-            if st.button("메시지 전송", key='send_message'):
-                try:
-                    # 입력 텍스트를 영어로 번역
-                    user_input_en = translator.translate(user_input, src='ko', dest='en').text
+        if st.button("메시지 전송"):
+        # 모델에 사용자 입력 전달하여 응답 생성
+        response = model.generate_content(user_input)
+        # 생성된 응답 출력
+        response_text = response.candidates[0].content.parts[0].text
+        st.write(response_text)
 
-                    # 모델에 사용자 입력 전달하여 응답 생성
-                    response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
-                    response_text_en = response.candidates[0]['output']
-                    response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
+                    # '요리 시작' 버튼 클릭 시 동작
+                    if st.button("요리 시작", key='start_cooking'):
+                        st.session_state['page'] = 'timer'
+                        st.session_state['timer_start'] = time.time()
+                        st.experimental_rerun()
 
-                    # 생성된 응답 출력 형식화
-                    st.write(response_text_ko.replace("\\n", "\n"))
                 except Exception as e:
                     st.write(f"오류가 발생했습니다: {e}")
-
-                # '요리 시작' 버튼 클릭 시 동작
-                if st.button("요리 시작", key='start_cooking'):
-                    st.session_state['page'] = 'timer'
 
     elif st.session_state['page'] == 'timer':
         st.markdown('<div class="title-container"><h1>타이머</h1></div>', unsafe_allow_html=True)
@@ -161,10 +158,12 @@ def app():
 
             if complete_button_placeholder.button("요리 완성", key=f'complete_cooking_{remaining_time}'):
                 st.session_state['page'] = 'fireworks'
+                st.experimental_rerun()
                 break
 
             if remaining_time == 0:
                 st.session_state['page'] = 'fireworks'
+                st.experimental_rerun()
                 break
 
             time.sleep(1)
