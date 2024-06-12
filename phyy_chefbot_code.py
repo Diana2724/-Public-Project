@@ -5,8 +5,7 @@ import time
 import re
 
 def format_recipe(text):
-    # 텍스트에서 재료와 조리법 부분을 찾아 형식화
-    ingredients_match = re.search(r'재료:\s*(.*?)(?:조리법|$)', text, re.DOTALL)
+    ingredients_match = re.search(r'재료:\s*(.*?)\s*조리법:', text, re.DOTALL)
     instructions_match = re.search(r'조리법:\s*(.*)', text, re.DOTALL)
     
     formatted_text = ""
@@ -26,7 +25,6 @@ def format_recipe(text):
     return formatted_text
 
 def app():
-    # CSS 및 JavaScript 스타일 정의
     st.markdown(
         """
         <style>
@@ -124,12 +122,6 @@ def app():
             100% { transform: translateY(-1000px); opacity: 0; }
         }
         </style>
-        <script>
-        function showBalloons() {
-            const balloonsContainer = document.querySelector('.balloons');
-            balloonsContainer.style.display = 'block';
-        }
-        </script>
         """,
         unsafe_allow_html=True
     )
@@ -172,7 +164,7 @@ def app():
 
                     # 모델에 사용자 입력 전달하여 응답 생성
                     response = genai.generate_text(prompt=user_input_en, model="models/text-bison-001")
-                    response_text_en = response.candidates[0]['output']
+                    response_text_en = response.candidates[0]['output'] if response.candidates else "응답을 생성할 수 없습니다."
 
                     # 응답을 한국어로 번역
                     response_text_ko = translator.translate(response_text_en, src='en', dest='ko').text
@@ -226,25 +218,8 @@ def app():
 
     elif st.session_state['page'] == 'celebration':
         st.markdown('<div class="title-container"><h1>축하합니다! 이제 행복한 식사를 즐기세요~!</h1></div>', unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="balloons">
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-                <div class="balloon"></div>
-            </div>
-            <script>
-            showBalloons();
-            </script>
-            """,
-            unsafe_allow_html=True
-        )
+        st.balloons()
+        st.session_state.step = 0
 
 if __name__ == "__main__":
     app()
