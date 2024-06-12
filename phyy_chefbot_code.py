@@ -100,7 +100,7 @@ def app():
     if st.button("메시지 전송"):
         try:
             # 모델에 사용자 입력 전달하여 응답 생성
-            response = genai.generate_text(prompt=user_input, model="gemini-pro")
+            response = genai.generate_text(prompt=user_input, model="models/text-bison-001")
             # 생성된 응답 출력
             response_text = response.candidates[0]['text']
             st.write(response_text)
