@@ -139,13 +139,17 @@ def app():
                     # 생성된 응답 출력 형식화
                     st.write(response_text_ko.replace("\\n", "\n"))
 
-                    if st.button("요리 시작", key='start_cooking'):
-                        st.session_state['page'] = 'timer'
-                        st.session_state['timer_start'] = time.time()
-                        st.experimental_rerun()
+                    if 'recipe_generated' not in st.session_state:
+                        st.session_state['recipe_generated'] = True
 
                 except Exception as e:
                     st.write(f"오류가 발생했습니다: {e}")
+
+        if 'recipe_generated' in st.session_state and st.session_state['recipe_generated']:
+            if st.button("요리 시작", key='start_cooking'):
+                st.session_state['page'] = 'timer'
+                st.session_state['timer_start'] = time.time()
+                st.experimental_rerun()
 
     elif st.session_state['page'] == 'timer':
         st.markdown('<div class="title-container"><h1>타이머</h1></div>', unsafe_allow_html=True)
