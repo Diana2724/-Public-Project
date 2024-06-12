@@ -110,6 +110,15 @@ def app():
             border-radius: 50%;
             animation: rise 5s linear infinite;
         }
+        .balloon:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .balloon:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .balloon:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .balloon:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .balloon:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .balloon:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .balloon:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .balloon:nth-child(8) { left: 80%; animation-delay: 7s; }
+        .balloon:nth-child(9) { left: 90%; animation-delay: 8s; }
         @keyframes rise {
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(-1000px); opacity: 0; }
@@ -216,19 +225,19 @@ def app():
             time.sleep(1)
 
     elif st.session_state['page'] == 'celebration':
-        st.markdown('<div class="title-container"><h1>축하합니다! 이제 행복한 식사를 즐기세요~! 🎉</h1></div>', unsafe_allow_html=True)
+        st.markdown('<div class="title-container"><h1>축하합니다! 이제 행복한 식사를 즐기세요~!</h1></div>', unsafe_allow_html=True)
         st.markdown(
             """
             <div class="balloons">
-                <div class="balloon" style="left: 10%;"></div>
-                <div class="balloon" style="left: 20%; animation-delay: 1s;"></div>
-                <div class="balloon" style="left: 30%; animation-delay: 2s;"></div>
-                <div class="balloon" style="left: 40%; animation-delay: 3s;"></div>
-                <div class="balloon" style="left: 50%; animation-delay: 4s;"></div>
-                <div class="balloon" style="left: 60%; animation-delay: 5s;"></div>
-                <div class="balloon" style="left: 70%; animation-delay: 6s;"></div>
-                <div class="balloon" style="left: 80%; animation-delay: 7s;"></div>
-                <div class="balloon" style="left: 90%; animation-delay: 8s;"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
+                <div class="balloon"></div>
             </div>
             <script>
             showBalloons();
